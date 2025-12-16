@@ -1,0 +1,54 @@
+.navigation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.nav-button {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: none;
+  background: var(--surface);
+  color: var(--text-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.nav-button:hover:not(:disabled) {
+  background: var(--surface-hover);
+  transform: scale(1.05);
+}
+
+.nav-button:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.nav-button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.nav-button svg {
+  width: 20px;
+  height: 20px;
+}
+
+.view-info {
+  text-align: center;
+  min-width: 200px;
+}
+
+.view-dates {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+

@@ -1,0 +1,74 @@
+.note-modal {
+  max-width: 500px;
+}
+
+.note-modal-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.note-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--accent);
+  color: var(--bg-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.note-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.note-modal-title h2 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.note-date {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-weight: 400;
+}
+
+.note-modal textarea {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1rem;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text-primary);
+  outline: none;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 120px;
+  line-height: 1.6;
+}
+
+.note-modal textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.note-modal textarea:focus {
+  border-color: var(--accent);
+  background: var(--bg-primary);
+}
+
+.note-modal .hint {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 0.5rem;
+  text-align: right;
+}
+
+.note-modal .btn-primary {
+  color: var(--bg-primary);
+}
+
