@@ -155,6 +155,27 @@
   opacity: 1;
 }
 
+/* Cell highlighting on hover */
+.header-cell.col-highlighted {
+  background: var(--surface-hover);
+}
+
+.header-cell.date-header.today.col-highlighted {
+  background: var(--accent-hover);
+}
+
+.activity-cell.row-highlighted {
+  background: var(--surface-hover);
+}
+
+.log-cell.cell-highlighted {
+  background: var(--surface-hover);
+}
+
+.log-cell.logged.cell-highlighted {
+  background: var(--success-hover);
+}
+
 .log-cell {
   width: 64px;
   height: 52px;

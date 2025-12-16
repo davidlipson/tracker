@@ -34,6 +34,7 @@ export function Grid({
   const [mobileActivityIndex, setMobileActivityIndex] = useState(0);
   const [editingActivityId, setEditingActivityId] = useState<string | null>(null);
   const [editingName, setEditingName] = useState("");
+  const [hoveredCell, setHoveredCell] = useState<{ row: number; col: number } | null>(null);
   const editInputRef = useRef<HTMLInputElement>(null);
   const touchStartX = useRef<number | null>(null);
 
@@ -135,21 +136,22 @@ export function Grid({
   return (
     <>
       {/* Desktop Grid */}
-      <div className="grid-container desktop-grid">
+      <div className="grid-container desktop-grid" onMouseLeave={() => setHoveredCell(null)}>
         <div className="grid">
           {/* Header row with dates */}
           <div className="grid-header">
             <div className="header-cell activity-header"></div>
-            {visibleDates.map((date) => {
+            {visibleDates.map((date, colIndex) => {
               const parsedDate = parseISO(date);
               const dayName = format(parsedDate, "EEE");
               const dayNum = format(parsedDate, "d");
               const isToday = date === todayStr;
+              const isHighlighted = hoveredCell !== null && colIndex <= hoveredCell.col;
 
               return (
                 <div
                   key={date}
-                  className={`header-cell date-header ${isToday ? "today" : ""}`}
+                  className={`header-cell date-header ${isToday ? "today" : ""} ${isHighlighted ? "col-highlighted" : ""}`}
                 >
                   <span className="day-name">{dayName}</span>
                   <span className="day-num">{dayNum}</span>
@@ -160,7 +162,7 @@ export function Grid({
 
           {/* Notes row - first before activities */}
           <div className="grid-row notes-row">
-            <div className="activity-cell notes-cell">
+            <div className={`activity-cell notes-cell ${hoveredCell !== null && hoveredCell.row >= 0 ? "row-highlighted" : ""}`}>
               <div className="notes-icon">
                 <svg
                   viewBox="0 0 24 24"
@@ -182,16 +184,19 @@ export function Grid({
               </div>
               <span className="activity-name">Notes</span>
             </div>
-            {visibleDates.map((date) => {
+            {visibleDates.map((date, colIndex) => {
               const note = getNoteForDate(date);
               const hasNote = !!note;
               const isToday = date === todayStr;
+              const isRowHighlighted = hoveredCell !== null && hoveredCell.row >= 0 && colIndex < hoveredCell.col;
+              const isColHighlighted = hoveredCell !== null && hoveredCell.row > 0 && hoveredCell.col === colIndex;
 
               return (
                 <div
                   key={`note-${date}`}
-                  className={`log-cell note-cell ${hasNote ? "has-note" : ""} ${isToday ? "today" : ""}`}
+                  className={`log-cell note-cell ${hasNote ? "has-note" : ""} ${isToday ? "today" : ""} ${isRowHighlighted || isColHighlighted ? "cell-highlighted" : ""}`}
                   onClick={() => onNoteClick(date)}
+                  onMouseEnter={() => setHoveredCell({ row: 0, col: colIndex })}
                   title={note?.text}
                 >
                   {hasNote ? (
@@ -231,9 +236,13 @@ export function Grid({
           </div>
 
           {/* Activity rows */}
-          {activities.map((activity) => (
+          {activities.map((activity, rowIndex) => {
+            const activityRowIndex = rowIndex + 1; // +1 because notes row is row 0
+            const isActivityRowHighlighted = hoveredCell !== null && activityRowIndex <= hoveredCell.row;
+            
+            return (
             <div key={activity.id} className="grid-row">
-              <div className="activity-cell">
+              <div className={`activity-cell ${isActivityRowHighlighted ? "row-highlighted" : ""}`}>
                 {editingActivityId === activity.id ? (
                   <input
                     ref={editInputRef}
@@ -273,15 +282,18 @@ export function Grid({
                   </svg>
                 </button>
               </div>
-              {visibleDates.map((date) => {
+              {visibleDates.map((date, colIndex) => {
                 const logged = isLogged(activity.id, date);
                 const isToday = date === todayStr;
+                const isRowHighlighted = hoveredCell !== null && hoveredCell.row === activityRowIndex && colIndex < hoveredCell.col;
+                const isColHighlighted = hoveredCell !== null && hoveredCell.col === colIndex && activityRowIndex < hoveredCell.row;
 
                 return (
                   <div
                     key={`${activity.id}-${date}`}
-                    className={`log-cell ${logged ? "logged" : ""} ${isToday ? "today" : ""}`}
+                    className={`log-cell ${logged ? "logged" : ""} ${isToday ? "today" : ""} ${isRowHighlighted || isColHighlighted ? "cell-highlighted" : ""}`}
                     onClick={() => onToggle(activity.id, date)}
+                    onMouseEnter={() => setHoveredCell({ row: activityRowIndex, col: colIndex })}
                   >
                     {logged && (
                       <div className="check-mark">
@@ -303,7 +315,8 @@ export function Grid({
                 );
               })}
             </div>
-          ))}
+          );
+          })}
 
           {/* Add activity row */}
           <div className="grid-row add-row">
