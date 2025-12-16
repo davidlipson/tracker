@@ -141,17 +141,16 @@ export function Grid({
           {/* Header row with dates */}
           <div className="grid-header">
             <div className="header-cell activity-header"></div>
-            {visibleDates.map((date, colIndex) => {
+            {visibleDates.map((date) => {
               const parsedDate = parseISO(date);
               const dayName = format(parsedDate, "EEE");
               const dayNum = format(parsedDate, "d");
               const isToday = date === todayStr;
-              const isHighlighted = hoveredCell !== null && colIndex <= hoveredCell.col;
 
               return (
                 <div
                   key={date}
-                  className={`header-cell date-header ${isToday ? "today" : ""} ${isHighlighted ? "col-highlighted" : ""}`}
+                  className={`header-cell date-header ${isToday ? "today" : ""}`}
                 >
                   <span className="day-name">{dayName}</span>
                   <span className="day-num">{dayNum}</span>
@@ -162,7 +161,7 @@ export function Grid({
 
           {/* Notes row - first before activities */}
           <div className="grid-row notes-row">
-            <div className={`activity-cell notes-cell ${hoveredCell !== null && hoveredCell.row >= 0 ? "row-highlighted" : ""}`}>
+            <div className={`activity-cell notes-cell ${hoveredCell !== null && hoveredCell.row === 0 ? "row-highlighted" : ""}`}>
               <div className="notes-icon">
                 <svg
                   viewBox="0 0 24 24"
@@ -188,7 +187,7 @@ export function Grid({
               const note = getNoteForDate(date);
               const hasNote = !!note;
               const isToday = date === todayStr;
-              const isRowHighlighted = hoveredCell !== null && hoveredCell.row >= 0 && colIndex < hoveredCell.col;
+              const isRowHighlighted = hoveredCell !== null && hoveredCell.row === 0 && colIndex < hoveredCell.col;
               const isColHighlighted = hoveredCell !== null && hoveredCell.row > 0 && hoveredCell.col === colIndex;
 
               return (
@@ -238,11 +237,11 @@ export function Grid({
           {/* Activity rows */}
           {activities.map((activity, rowIndex) => {
             const activityRowIndex = rowIndex + 1; // +1 because notes row is row 0
-            const isActivityRowHighlighted = hoveredCell !== null && activityRowIndex <= hoveredCell.row;
+            const isCurrentRow = hoveredCell !== null && hoveredCell.row === activityRowIndex;
             
             return (
             <div key={activity.id} className="grid-row">
-              <div className={`activity-cell ${isActivityRowHighlighted ? "row-highlighted" : ""}`}>
+              <div className={`activity-cell ${isCurrentRow ? "row-highlighted" : ""}`}>
                 {editingActivityId === activity.id ? (
                   <input
                     ref={editInputRef}

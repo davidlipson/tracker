@@ -156,24 +156,16 @@
 }
 
 /* Cell highlighting on hover */
-.header-cell.col-highlighted {
-  background: var(--surface-hover);
-}
-
-.header-cell.date-header.today.col-highlighted {
-  background: var(--accent-hover);
-}
-
 .activity-cell.row-highlighted {
-  background: var(--surface-hover);
+  background: rgba(0, 0, 0, 0.03);
 }
 
 .log-cell.cell-highlighted {
-  background: var(--surface-hover);
+  background: rgba(0, 0, 0, 0.03);
 }
 
 .log-cell.logged.cell-highlighted {
-  background: var(--success-hover);
+  opacity: 0.85;
 }
 
 .log-cell {
